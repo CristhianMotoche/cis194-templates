@@ -58,12 +58,10 @@ posInt = Parser f
 
 instance Functor Parser where
   fmap :: (a -> b) -> Parser a -> Parser b
-  fmap = undefined
-
+  fmap func parser = Parser (fmap (first func) . runParser parser)
 
 first :: (a -> b) -> (a, c) -> (b, c)
-first = undefined
-
+first func (a, c) = (func a, c)
 
 ----------------------------------------------------------------------
 -- Exercise 2
