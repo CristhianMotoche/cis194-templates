@@ -95,7 +95,7 @@ instance Applicative Parser where
 -- Nothing
 
 abParser :: Parser (Char, Char)
-abParser = undefined
+abParser = (,) <$> char 'a' <*> char 'b'
 
 
 -- |
@@ -107,7 +107,6 @@ abParser = undefined
 
 abParser_ :: Parser ()
 abParser_ = undefined
-
 
 -- |
 --
