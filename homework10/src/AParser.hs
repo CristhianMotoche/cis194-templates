@@ -69,11 +69,19 @@ first func (a, c) = (func a, c)
 
 instance Applicative Parser where
   pure :: a -> Parser a
-  pure = undefined
+  pure x = Parser (\s -> Just (x, s))
 
   (<*>) :: Parser (a -> b) -> Parser a -> Parser b
-  (<*>) = undefined
-
+  (<*>) pF pA =
+      Parser func
+        where
+            func s =
+                case runParser pF s of
+                  Nothing -> Nothing
+                  Just (f, s1) ->
+                      case runParser pA s1 of
+                        Nothing -> Nothing
+                        Just (a, s2) -> Just (f a, s2)
 
 ----------------------------------------------------------------------
 -- Exercise 3
