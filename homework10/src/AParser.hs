@@ -106,7 +106,10 @@ abParser = (,) <$> char 'a' <*> char 'b'
 -- Nothing
 
 abParser_ :: Parser ()
-abParser_ = undefined
+abParser_ = f <$> char 'a' <*> char 'b'
+    where
+        f :: Char -> Char -> ()
+        f _ _ = ()
 
 -- |
 --
@@ -114,7 +117,9 @@ abParser_ = undefined
 -- Just ([12,34],"")
 
 intPair :: Parser [Integer]
-intPair = undefined
+intPair = f <$> posInt <*> char ' ' <*> posInt
+    where
+        f a _ b = [a, b]
 
 
 ----------------------------------------------------------------------
