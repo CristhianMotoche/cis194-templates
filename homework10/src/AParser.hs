@@ -158,8 +158,6 @@ instance Alternative Parser where
 
 intOrUppercase :: Parser ()
 intOrUppercase =
-    Parser func
-        where
-            func s = posInt <|> runParser (satisfy isUpper) s
-
-
+            f <$> posInt <|> f <$> Parser (runParser (satisfy isUpper))
+                where
+                    f _ = ()
