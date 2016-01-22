@@ -128,11 +128,20 @@ intPair = f <$> posInt <*> char ' ' <*> posInt
 
 instance Alternative Parser where
   empty :: Parser a
-  empty = undefined
+  empty =
+    Parser (const Nothing)
 
   (<|>) :: Parser a -> Parser a -> Parser a
-  (<|>) = undefined
-
+  (<|>) pA1 pA2 =
+      Parser func
+        where
+            func s =
+                case runParser pA1 s of
+                  Just x -> Just x
+                  Nothing ->
+                      case runParser pA2 s of
+                        Nothing -> Nothing
+                        j -> j
 
 ----------------------------------------------------------------------
 -- Exercise 5
@@ -148,4 +157,9 @@ instance Alternative Parser where
 -- Nothing
 
 intOrUppercase :: Parser ()
-intOrUppercase = undefined
+intOrUppercase =
+    Parser func
+        where
+            func s = posInt <|> runParser (satisfy isUpper) s
+
+
