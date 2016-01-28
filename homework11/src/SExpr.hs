@@ -26,7 +26,7 @@ import Data.Char
 -- Just ("","abcdeFGh")
 
 zeroOrMore :: Parser a -> Parser [a]
-zeroOrMore = undefined
+zeroOrMore p = oneOrMore p <|> pure []
 
 
 -- |
@@ -37,7 +37,9 @@ zeroOrMore = undefined
 -- Nothing
 
 oneOrMore :: Parser a -> Parser [a]
-oneOrMore = undefined
+oneOrMore p = f <$> p <*> zeroOrMore p
+                where
+                    f = (:)
 
 
 ----------------------------------------------------------------------
@@ -45,7 +47,7 @@ oneOrMore = undefined
 ----------------------------------------------------------------------
 
 spaces :: Parser String
-spaces = undefined
+spaces = zeroOrMore (satisfy isSpace)
 
 
 -- |
