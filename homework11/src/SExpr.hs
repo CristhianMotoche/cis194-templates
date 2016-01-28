@@ -62,7 +62,7 @@ spaces = zeroOrMore (satisfy isSpace)
 -- Nothing
 
 ident :: Parser String
-ident = liftA2 (:) (satisfy isAlpha) (oneOrMore (satisfy isAlphaNum))
+ident = liftA2 (:) (satisfy isAlpha) (zeroOrMore (satisfy isAlphaNum))
 
 
 ----------------------------------------------------------------------
@@ -98,5 +98,17 @@ data SExpr
 -- >>> runParser parseSExpr "(lambda x x"
 -- Nothing
 
+parseAtom :: Parser Atom
+parseAtom = spaces *> f <* spaces
+                where
+                    f = p1 <|> p2
+                    p1 = N <$> posInt
+                    p2 = I <$> ident
+
 parseSExpr :: Parser SExpr
-parseSExpr = undefined
+parseSExpr = spaces *> f <* spaces
+                where
+                    f = A <$> parseAtom <|> g
+                    parI = char '('
+                    parD = char ')'
+                    g = parI *> (Comb <$> oneOrMore parseSExpr) <* parD
