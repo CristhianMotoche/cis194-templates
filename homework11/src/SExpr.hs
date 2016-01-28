@@ -62,7 +62,7 @@ spaces = zeroOrMore (satisfy isSpace)
 -- Nothing
 
 ident :: Parser String
-ident = undefined
+ident = liftA2 (:) (satisfy isAlpha) (oneOrMore (satisfy isAlphaNum))
 
 
 ----------------------------------------------------------------------
